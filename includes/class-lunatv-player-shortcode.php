@@ -75,10 +75,15 @@ class LunaTV_Player_Shortcode {
             $style = 'max-width:' . absint( $atts['width'] ) . 'px;';
         }
 
+        // Endpoint del contador (option > filtro). Vacío = contador oculto.
+        $views_endpoint = get_option( 'lunatv_player_views_endpoint', LUNATV_PLAYER_DEFAULT_VIEWS_ENDPOINT );
+        $views_endpoint = apply_filters( 'lunatv_player_views_endpoint', $views_endpoint );
+
         $config = array(
-            'streamUrl' => esc_url_raw( $stream_url ),
-            'autoplay'  => $autoplay,
-            'muted'     => $muted,
+            'streamUrl'     => esc_url_raw( $stream_url ),
+            'autoplay'      => $autoplay,
+            'muted'         => $muted,
+            'viewsEndpoint' => $views_endpoint ? esc_url_raw( $views_endpoint ) : '',
         );
 
         ob_start();
@@ -99,6 +104,16 @@ class LunaTV_Player_Shortcode {
                     class="lunatv-player-watermark"
                     aria-hidden="true"
                 />
+                <?php if ( ! empty( $config['viewsEndpoint'] ) ) : ?>
+                <div class="lunatv-player-views" hidden>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+                         stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M2.5 12C3.7 7.9 7.5 5 12 5s8.3 2.9 9.5 7c-1.2 4.1-5 7-9.5 7s-8.3-2.9-9.5-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <span class="lunatv-player-count">—</span>
+                </div>
+                <?php endif; ?>
                 <a
                     href="https://lunatv.do"
                     class="lunatv-player-attribution"

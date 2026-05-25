@@ -11,8 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class LunaTV_Player_Settings {
 
-    const OPTION_GROUP = 'lunatv_player_settings';
-    const OPTION_NAME  = 'lunatv_player_stream_url';
+    const OPTION_GROUP   = 'lunatv_player_settings';
+    const OPTION_NAME    = 'lunatv_player_stream_url';
+    const OPTION_VIEWS   = 'lunatv_player_views_endpoint';
 
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_menu' ) );
@@ -56,6 +57,24 @@ class LunaTV_Player_Settings {
             self::OPTION_GROUP,
             'lunatv_player_main'
         );
+
+        register_setting(
+            self::OPTION_GROUP,
+            self::OPTION_VIEWS,
+            array(
+                'type'              => 'string',
+                'sanitize_callback' => 'esc_url_raw',
+                'default'           => LUNATV_PLAYER_DEFAULT_VIEWS_ENDPOINT,
+            )
+        );
+
+        add_settings_field(
+            self::OPTION_VIEWS,
+            __( 'Endpoint del contador (opcional)', 'lunatv-player' ),
+            array( $this, 'render_views_field' ),
+            self::OPTION_GROUP,
+            'lunatv_player_main'
+        );
     }
 
     public function render_field() {
@@ -67,6 +86,18 @@ class LunaTV_Player_Settings {
         );
         echo '<p class="description">' .
             esc_html__( 'Por defecto, el plugin viene con el stream oficial de LunaTV. Solo cambia este valor si tienes un URL distinto.', 'lunatv-player' ) .
+            '</p>';
+    }
+
+    public function render_views_field() {
+        $value = get_option( self::OPTION_VIEWS, LUNATV_PLAYER_DEFAULT_VIEWS_ENDPOINT );
+        printf(
+            '<input type="url" name="%s" value="%s" class="regular-text" placeholder="https://lunatv.do/api/live/views" />',
+            esc_attr( self::OPTION_VIEWS ),
+            esc_attr( $value )
+        );
+        echo '<p class="description">' .
+            esc_html__( 'Muestra el contador global de espectadores en vivo. Déjalo vacío para ocultar el contador.', 'lunatv-player' ) .
             '</p>';
     }
 

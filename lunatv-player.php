@@ -3,7 +3,7 @@
  * Plugin Name:       LunaTV Player
  * Plugin URI:        https://lunatv.do
  * Description:       Embed the LunaTV Canal 25 live stream on any WordPress site using the shortcode [lunatv-player]. HLS-based player with hls.js + Plyr.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            LunaTV Canal 25
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'LUNATV_PLAYER_VERSION', '1.0.0' );
+define( 'LUNATV_PLAYER_VERSION', '1.1.0' );
 define( 'LUNATV_PLAYER_FILE', __FILE__ );
 define( 'LUNATV_PLAYER_PATH', plugin_dir_path( __FILE__ ) );
 define( 'LUNATV_PLAYER_URL', plugin_dir_url( __FILE__ ) );
@@ -30,6 +30,15 @@ define( 'LUNATV_PLAYER_URL', plugin_dir_url( __FILE__ ) );
  *   add_filter( 'lunatv_player_stream_url', fn() => 'https://your-cdn/stream.m3u8' );
  */
 define( 'LUNATV_PLAYER_DEFAULT_STREAM', 'https://stream.lunatv.do/hls/prueba.m3u8' );
+
+/**
+ * Endpoint del contador global de reproducciones.
+ * El player hace un POST al iniciar el play (lo cuenta una vez por sesión) y
+ * un GET cada pocos segundos para mostrar el número. Configurable en
+ * Ajustes → LunaTV Player o vía filtro 'lunatv_player_views_endpoint'.
+ * Dejar vacío desactiva el contador.
+ */
+define( 'LUNATV_PLAYER_DEFAULT_VIEWS_ENDPOINT', 'https://lunatv.do/api/live/views' );
 
 // Load plugin classes.
 require_once LUNATV_PLAYER_PATH . 'includes/class-lunatv-player-assets.php';
@@ -57,6 +66,9 @@ add_action( 'plugins_loaded', 'lunatv_player_init' );
 function lunatv_player_activate() {
     if ( false === get_option( 'lunatv_player_stream_url' ) ) {
         add_option( 'lunatv_player_stream_url', LUNATV_PLAYER_DEFAULT_STREAM );
+    }
+    if ( false === get_option( 'lunatv_player_views_endpoint' ) ) {
+        add_option( 'lunatv_player_views_endpoint', LUNATV_PLAYER_DEFAULT_VIEWS_ENDPOINT );
     }
 }
 register_activation_hook( __FILE__, 'lunatv_player_activate' );
