@@ -1,0 +1,157 @@
+/**
+ * LunaTV Player — Frontend styles
+ *
+ * Brand palette (LunaTV Canal 25):
+ *   --lunatv-primary:   #3FA9F5  (cyan / azul claro - acento principal, controles Plyr)
+ *   --lunatv-deep:      #0B2545  (azul oscuro institucional)
+ *   --lunatv-accent:    #E11D2C  (rojo del tagline / indicador en vivo)
+ *   --lunatv-dark:      #050B17  (fondo player)
+ *   --lunatv-text:      #FFFFFF
+ *
+ * All classes are prefixed with .lunatv-player-* to avoid clashing
+ * with the host theme's CSS.
+ */
+
+.lunatv-player-wrap {
+    --lunatv-primary: #3FA9F5;
+    --lunatv-deep: #0B2545;
+    --lunatv-accent: #E11D2C;
+    --lunatv-dark: #050B17;
+    --lunatv-text: #FFFFFF;
+
+    width: 100%;
+    margin: 0 auto 1.5em;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 16:9 responsive container — works on every screen */
+.lunatv-player-aspect {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--lunatv-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Fallback for very old browsers without aspect-ratio support */
+@supports not (aspect-ratio: 16 / 9) {
+    .lunatv-player-aspect {
+        padding-top: 56.25%;
+        height: 0;
+    }
+    .lunatv-player-aspect > .lunatv-player-video,
+    .lunatv-player-aspect > .plyr {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+    }
+}
+
+.lunatv-player-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Watermark: top-right, semi-transparent, doesn't block clicks */
+.lunatv-player-watermark {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 110px;
+    height: auto;
+    opacity: 0.72;
+    pointer-events: none;
+    z-index: 3;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85));
+    transition: opacity 0.2s ease;
+}
+
+.lunatv-player-wrap:hover .lunatv-player-watermark {
+    opacity: 0.95;
+}
+
+/* Smaller watermark on mobile */
+@media (max-width: 480px) {
+    .lunatv-player-watermark {
+        width: 72px;
+        top: 10px;
+        right: 10px;
+    }
+}
+
+/* Bottom-left attribution link */
+.lunatv-player-attribution {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    z-index: 3;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    pointer-events: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lunatv-player-attribution::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--lunatv-accent);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: lunatv-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes lunatv-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+.lunatv-player-attribution:hover {
+    background: var(--lunatv-primary);
+    color: var(--lunatv-deep);
+}
+
+/* Hide attribution while controls are visible to avoid overlap */
+.lunatv-player-aspect .plyr--hide-controls .lunatv-player-attribution {
+    opacity: 1;
+}
+
+.lunatv-player-aspect .plyr:not(.plyr--hide-controls) .lunatv-player-attribution {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Plyr brand color overrides */
+.lunatv-player-wrap .plyr {
+    --plyr-color-main: var(--lunatv-primary);
+    --plyr-video-control-color-hover: #FFFFFF;
+    --plyr-video-control-background-hover: var(--lunatv-primary);
+    --plyr-range-fill-background: var(--lunatv-primary);
+    --plyr-control-radius: 4px;
+    --plyr-font-family: inherit;
+    height: 100%;
+}
+
+/* Error message shown only to admins when stream URL is missing */
+.lunatv-player-error {
+    padding: 16px 20px;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-left: 4px solid #ffc107;
+    color: #664d03;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 1em 0;
+}
