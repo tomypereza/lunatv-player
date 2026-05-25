@@ -4,7 +4,7 @@ Tags: hls, live streaming, video player, plyr, hls.js, lunatv
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -73,10 +73,13 @@ Yes. The plugin uses native HLS on iOS/Safari and hls.js on all other browsers, 
 
 == Changelog ==
 
-= 1.1.0 =
+= 1.2.0 =
 * Added a global live-viewers counter shown in the player (top-left badge).
 * The player registers one play per session and polls the count every 12s.
 * New optional setting "Endpoint del contador" (Settings → LunaTV Player); leave empty to hide the counter.
+
+= 1.1.0 =
+* Maintenance release.
 
 = 1.0.0 =
 * Initial release.

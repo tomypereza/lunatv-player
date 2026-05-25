@@ -3,7 +3,7 @@
  * Plugin Name:       LunaTV Player
  * Plugin URI:        https://lunatv.do
  * Description:       Embed the LunaTV Canal 25 live stream on any WordPress site using the shortcode [lunatv-player]. HLS-based player with hls.js + Plyr.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            LunaTV Canal 25
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'LUNATV_PLAYER_VERSION', '1.1.0' );
+define( 'LUNATV_PLAYER_VERSION', '1.2.0' );
 define( 'LUNATV_PLAYER_FILE', __FILE__ );
 define( 'LUNATV_PLAYER_PATH', plugin_dir_path( __FILE__ ) );
 define( 'LUNATV_PLAYER_URL', plugin_dir_url( __FILE__ ) );
