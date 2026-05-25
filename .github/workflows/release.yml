@@ -1,0 +1,42 @@
+﻿name: Build release ZIP
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Stage plugin folder
+        run: |
+          mkdir -p build/lunatv-player
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='*.zip' \
+            --exclude='README.md' \
+            --exclude='.gitignore' \
+            ./ build/lunatv-player/
+
+      - name: Create ZIP
+        working-directory: build
+        run: zip -r "lunatv-player-${{ steps.version.outputs.VERSION }}.zip" lunatv-player
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/lunatv-player-${{ steps.version.outputs.VERSION }}.zip
+          generate_release_notes: true
